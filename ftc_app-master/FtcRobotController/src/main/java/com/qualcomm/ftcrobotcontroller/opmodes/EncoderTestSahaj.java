@@ -27,8 +27,8 @@ public class EncoderTestSahaj extends OpMode {
 
         lfMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        lfMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        rfMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        lfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         telemetry.addData("Reset Complete", "");
     }
@@ -41,8 +41,8 @@ public class EncoderTestSahaj extends OpMode {
         telemetry.clearData();
         telemetry.addData("TargetLeft: ", lfMotor.getTargetPosition());
 
-        lfMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rfMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         lfMotor.setPower(.40);
         rfMotor.setPower(.40);

@@ -41,10 +41,10 @@ public class EncoderTestRohan extends LinearOpMode {
         lbMotor.setDirection(DcMotor.Direction.REVERSE);
         rfMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        lfMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        lbMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        rfMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        rbMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        lfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        lbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         telemetry.addData("Reset Complete", "");
 
@@ -64,8 +64,8 @@ public class EncoderTestRohan extends LinearOpMode {
         //telemetry.clearData();
         telemetry.addData("Target", rfMotor.getTargetPosition());
 
-        lfMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rfMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         lfMotor.setPower(0.75);
         //lbMotor.setPower(0.75);

@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 public class AutonomousRampBlue extends LinearOpMode{
 
-    //This is a test to see if I can successfully upload to Github via direct Android Studio integration
     DcMotor lfMotor;
     DcMotor lbMotor;
     DcMotor rfMotor;

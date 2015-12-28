@@ -54,17 +54,21 @@ public class EncoderTestRohan extends LinearOpMode {
 
         telemetry.addData("starting position: ", rfMotor.getCurrentPosition());
 
-
+        lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        lbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         //moveForwardEncoder(0.75, 10);
 
+        telemetry.addData("before", rfMotor.getTargetPosition());
         lfMotor.setTargetPosition(500);
         rfMotor.setTargetPosition(500);
 
         //telemetry.clearData();
         telemetry.addData("Target", rfMotor.getTargetPosition());
 
-        lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        /*lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         lfMotor.setPower(0.75);
@@ -74,6 +78,6 @@ public class EncoderTestRohan extends LinearOpMode {
 
 
 
-        telemetry.addData("ending position: ", rfMotor.getCurrentPosition());
+        telemetry.addData("ending position: ", rfMotor.getCurrentPosition());*/
     }
 }

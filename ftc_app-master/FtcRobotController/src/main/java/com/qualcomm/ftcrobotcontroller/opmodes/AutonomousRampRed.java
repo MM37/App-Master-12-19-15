@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * Created by rkhaj on 11/14/2015.
+ * Created by rkhaj on 12/11/2015.
  */
 public class AutonomousRampRed extends LinearOpMode{
 
@@ -13,18 +13,18 @@ public class AutonomousRampRed extends LinearOpMode{
     DcMotor lbMotor;
     DcMotor rfMotor;
     DcMotor rbMotor;
-    Servo lockServos;
-    DcMotor armMotor;
-    DcMotor slideMotor;
+    Servo lockServoLeft;
+    Servo lockServoRight;
 
-    public static final double LOCK_SERVO_CLOSED_POSITION = 0.99;
+    public static final int LOCK_SERVO_LEFT_CLOSED_POSITION = 0;
+    public static final int LOCK_SERVO_RIGHT_CLOSED_POSITION = 0;
 
     public void moveForward(double power, long time) throws InterruptedException{
         lfMotor.setPower(power);
         lbMotor.setPower(power);
         rbMotor.setPower(power);
         rfMotor.setPower(power);
-        sleep(time);
+        sleep(time * 1000);
         lfMotor.setPower(0);
         lbMotor.setPower(0);
         rbMotor.setPower(0);
@@ -33,10 +33,10 @@ public class AutonomousRampRed extends LinearOpMode{
     }
 
     public void turnRight(double power, long time) throws InterruptedException{
-        lfMotor.setPower(power);
-        lbMotor.setPower(power);
-        rbMotor.setPower(-power);
-        rfMotor.setPower(-power);
+        lfMotor.setPower(-power);
+        lbMotor.setPower(-power);
+        rbMotor.setPower(power);
+        rfMotor.setPower(power);
         sleep(time);
         lfMotor.setPower(0);
         lbMotor.setPower(0);
@@ -50,7 +50,7 @@ public class AutonomousRampRed extends LinearOpMode{
         lbMotor.setPower(-power);
         rbMotor.setPower(power);
         rfMotor.setPower(power);
-        sleep(time);
+        sleep(time * 1000);
         lfMotor.setPower(0);
         lbMotor.setPower(0);
         rbMotor.setPower(0);
@@ -64,38 +64,27 @@ public class AutonomousRampRed extends LinearOpMode{
         lbMotor = hardwareMap.dcMotor.get("lbMotor");
         rfMotor = hardwareMap.dcMotor.get("rfMotor");
         rbMotor = hardwareMap.dcMotor.get("rbMotor");
-        armMotor = hardwareMap.dcMotor.get("armMotor");
-        slideMotor = hardwareMap.dcMotor.get("pulley1");
-        lockServos = hardwareMap.servo.get("lockServos");
+        lockServoLeft = hardwareMap.servo.get("lockServoLeft");
+        lockServoRight = hardwareMap.servo.get("lockServoRight");
 
-        lbMotor.setDirection(DcMotor.Direction.REVERSE);
+        rbMotor.setDirection(DcMotor.Direction.REVERSE);
         lfMotor.setDirection(DcMotor.Direction.REVERSE);
-        armMotor.setDirection(DcMotor.Direction.REVERSE);
 
         waitOneFullHardwareCycle();
         waitForStart();
 
-        moveForward(0.75, 1800);
-        turnLeft(0.75, 945);
-
-        /*armMotor.setPower(0.25);
-        sleep(350);
-        armMotor.setPower(0);*/
-
-        /*slideMotor.setPower(0.75);
-        sleep(2000);
-        slideMotor.setPower(0);*/
-
-        lfMotor.setPower(-0.75);
-        lbMotor.setPower(-0.75);
-        rbMotor.setPower(-0.75);
-        rfMotor.setPower(-0.75);
+        moveForward(0.75, 2);
+        turnLeft(0.75, 1100);
+        lfMotor.setPower(0.75);
+        lbMotor.setPower(0.75);
+        rbMotor.setPower(0.75);
+        rfMotor.setPower(0.75);
         sleep(4000);
-        /*lockServos.setPosition(LOCK_SERVO_CLOSED_POSITION);
-        sleep(500);
+        lockServoLeft.setPosition(LOCK_SERVO_LEFT_CLOSED_POSITION);
+        lockServoRight.setPosition(LOCK_SERVO_RIGHT_CLOSED_POSITION);
         lfMotor.setPower(0);
         lbMotor.setPower(0);
         rbMotor.setPower(0);
-        rfMotor.setPower(0);*/
+        rfMotor.setPower(0);
     }
 }

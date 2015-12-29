@@ -98,6 +98,6 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("PushBotIrSeek", PushBotIrSeek.java);
     //manager.register("PushBotSquare", PushBotSquare.java);
     manager.register("EncoderTestRohan", EncoderTestRohan.class);
-    manager.register("AutonomousRampRed", AutonomousRampRed.class);
+    manager.register("AutonomousRampBlue", AutonomousRampBlue.class);
   }
 }

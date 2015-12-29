@@ -26,27 +26,32 @@ public class EncoderTestSahaj extends LinearOpMode {
         lbMotor.setDirection(DcMotor.Direction.REVERSE);
 
         rfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        rfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
 
         //this is where robot movement starts
-        waitOneFullHardwareCycle();
+        for(int i=0; i<15; i++){
+            waitOneFullHardwareCycle();
+            telemetry.addData("cycle", i);
+        }
+
         waitForStart();
+
+
+        rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         //MAKE SURE TO INSERT 10 SECOND WAIT!!!!
 
-        while (rfMotor.getCurrentPosition() < TARGET){
+        /*while (rfMotor.getCurrentPosition() < TARGET){
             rfMotor.setPower(.5);
             rbMotor.setPower(.5);
             lfMotor.setPower(.5);
             lbMotor.setPower(.5);
             telemetry.clearData();
             telemetry.addData("rfMotor Position", rfMotor.getCurrentPosition());
-        }
+        } */
 
-        rfMotor.setPower(0);
-        rbMotor.setPower(0);
-        lfMotor.setPower(0);
-        lbMotor.setPower(0);
+        rfMotor.setPower(.5);
+        rfMotor.setTargetPosition(3000);
+
 
         telemetry.addData("Success", "");
 

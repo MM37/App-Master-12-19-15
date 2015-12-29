@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * Created by rkhaj on 11/14/2015.
+ * Created by rkhaj on 12/11/2015.
  */
 public class AutonomousRampRed extends LinearOpMode{
 
@@ -74,7 +74,7 @@ public class AutonomousRampRed extends LinearOpMode{
         waitForStart();
 
         moveForward(0.75, 2);
-        turnRight(0.75, 1100);
+        turnLeft(0.75, 1100);
         lfMotor.setPower(0.75);
         lbMotor.setPower(0.75);
         rbMotor.setPower(0.75);

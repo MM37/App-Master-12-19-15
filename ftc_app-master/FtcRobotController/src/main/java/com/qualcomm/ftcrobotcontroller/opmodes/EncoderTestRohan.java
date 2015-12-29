@@ -41,10 +41,10 @@ public class EncoderTestRohan extends LinearOpMode {
         lbMotor.setDirection(DcMotor.Direction.REVERSE);
         rfMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        lfMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        lbMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        rfMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        rbMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        lfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        lbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         telemetry.addData("Reset Complete", "");
 
@@ -54,18 +54,22 @@ public class EncoderTestRohan extends LinearOpMode {
 
         telemetry.addData("starting position: ", rfMotor.getCurrentPosition());
 
-
+        lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        lbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         //moveForwardEncoder(0.75, 10);
 
+        telemetry.addData("before", rfMotor.getTargetPosition());
         lfMotor.setTargetPosition(500);
         rfMotor.setTargetPosition(500);
 
         //telemetry.clearData();
         telemetry.addData("Target", rfMotor.getTargetPosition());
 
-        lfMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rfMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        /*lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         lfMotor.setPower(0.75);
         //lbMotor.setPower(0.75);
@@ -74,6 +78,6 @@ public class EncoderTestRohan extends LinearOpMode {
 
 
 
-        telemetry.addData("ending position: ", rfMotor.getCurrentPosition());
+        telemetry.addData("ending position: ", rfMotor.getCurrentPosition());*/
     }
 }

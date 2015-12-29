@@ -35,7 +35,7 @@ public class EncoderTestSahaj extends LinearOpMode {
 
         waitForStart();
 
-
+        
         rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         //MAKE SURE TO INSERT 10 SECOND WAIT!!!!

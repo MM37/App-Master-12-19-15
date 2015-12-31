@@ -125,7 +125,7 @@ public class TeleOp2New extends OpMode {
 
 
         if (abs(gamepad2.left_stick_y)>0.08) {
-            bucketArmPwr = -gamepad2.right_stick_y;
+            bucketArmPwr = -gamepad2.left_stick_y;
         } else {
             bucketArmPwr = 0;
         }

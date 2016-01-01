@@ -208,11 +208,15 @@ public class TeleQualifierEncoder extends OpMode {
         /*
         Lock Servo assignment
         */
-        if (gamepad2.x && !servoLockWasPressed){
-            if(isLockClosed)
-               lockServos.setPosition(LOCK_SERVOS_OPEN_POSITION);
-            else
-               lockServos.setPosition(LOCK_SERVOS_CLOSED_POSITION);
+        if (gamepad2.x && !servoLockWasPressed) {
+            if (isLockClosed){
+                lockServos.setPosition(LOCK_SERVOS_OPEN_POSITION);
+                isLockClosed = false;
+            }
+            else {
+                lockServos.setPosition(LOCK_SERVOS_CLOSED_POSITION);
+                isLockClosed = true;
+            }
         }
 
 

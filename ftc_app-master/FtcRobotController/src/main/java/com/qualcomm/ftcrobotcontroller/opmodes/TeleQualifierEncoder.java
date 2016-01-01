@@ -240,7 +240,9 @@ public class TeleQualifierEncoder extends OpMode {
         *used to check if button was pressed last cycle
          */
         servoLockWasPressed = gamepad2.x;
-        telemetry.addData("gamepad2.x", servoLockWasPressed);
+        telemetry.addData("gamepad2.x", gamepad2.x);
+        telemetry.addData("servoLockWasPressed", servoLockWasPressed);
+        telemetry.addData("isLockClosed", isLockClosed);
     }
 
 

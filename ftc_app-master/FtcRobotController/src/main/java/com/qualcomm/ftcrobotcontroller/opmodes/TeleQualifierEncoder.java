@@ -41,8 +41,8 @@ public class TeleQualifierEncoder extends OpMode {
     Declares servo position variables
     */
 
-    public static final double LOCK_SERVOS_CLOSED_POSITION = 0.0;
-    public static final double LOCK_SERVOS_OPEN_POSITION = 0.50;
+    public static final double LOCK_SERVOS_CLOSED_POSITION = 0.1;
+    public static final double LOCK_SERVOS_OPEN_POSITION = 0.60;
     public static final double DEPOSITING_FLAP_SERVO_OPEN_POSITION = 0;
     public static final double DEPOSITING_FLAP_SERVO_CLOSED_POSITION = 0;
     public static Boolean onRamp = false;             //should be set to true when on ramp;
@@ -221,7 +221,7 @@ public class TeleQualifierEncoder extends OpMode {
         *updates robot part status
          */
         telemetry.clearData();
-        if(lockServos.getPosition() > 0.1)
+        if(lockServos.getPosition() > 0.3)
             telemetry.addData("Lock Servos: " , "locked");
         else
             telemetry.addData("LockServos: ", "open");
@@ -236,6 +236,7 @@ public class TeleQualifierEncoder extends OpMode {
         *used to check if button was pressed last cycle
          */
         servoLockWasPressed = gamepad2.x;
+        telemetry.addData("gamepad2.x", servoLockWasPressed);
     }
 
 

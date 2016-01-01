@@ -211,11 +211,11 @@ public class TeleQualifierEncoder extends OpMode {
         if (gamepad2.x && !servoLockWasPressed) {
             if (isLockClosed){
                 lockServos.setPosition(LOCK_SERVOS_OPEN_POSITION);
-                isLockClosed = false;
+                isLockClosed = !isLockClosed;
             }
             else {
                 lockServos.setPosition(LOCK_SERVOS_CLOSED_POSITION);
-                isLockClosed = true;
+                isLockClosed = !isLockClosed;
             }
         }
 

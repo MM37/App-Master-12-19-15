@@ -144,7 +144,7 @@ public class TeleQualifierEncoder extends OpMode {
 
 
         if (abs(gamepad2.left_stick_y)>0.08) {
-            bucketArmPwr = -gamepad2.left_stick_y;
+            bucketArmPwr = (float)-0.75*gamepad2.left_stick_y;
         } else {
             bucketArmPwr = 0;
         }
@@ -174,6 +174,9 @@ public class TeleQualifierEncoder extends OpMode {
         rfMotor.setPower(rightDrivePwr);
         rbMotor.setPower(rightDrivePwr);
         bucketArmMotor.setPower(bucketArmPwr);
+
+        telemetry.clearData();
+        telemetry.addData("pulleyMotor1", pulleyMotor1.getCurrentPosition());
 
         //avoids running pulley motor in reverse past initial position
         if(pulleyMotor1.getCurrentPosition() > slideInitialPosition)
@@ -228,7 +231,7 @@ public class TeleQualifierEncoder extends OpMode {
         if(lockServos.getPosition() > 0.3)
             telemetry.addData("Lock Servos: " , "locked");
         else
-            telemetry.addData("LockServos: ", "open");
+            telemetry.addData("LockServos: ", "NOT locked");
 
         if(onRamp)
             telemetry.addData("Drive Mode: ", "onRamp");
@@ -240,9 +243,7 @@ public class TeleQualifierEncoder extends OpMode {
         *used to check if button was pressed last cycle
          */
         servoLockWasPressed = gamepad2.x;
-        telemetry.addData("gamepad2.x", gamepad2.x);
-        telemetry.addData("servoLockWasPressed", servoLockWasPressed);
-        telemetry.addData("isLockClosed", isLockClosed);
+
     }
 
 

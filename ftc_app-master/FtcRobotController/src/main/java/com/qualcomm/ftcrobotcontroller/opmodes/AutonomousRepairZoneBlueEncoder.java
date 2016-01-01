@@ -16,7 +16,7 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
     DcMotor lbMotor;
     DcMotor rfMotor;
     DcMotor rbMotor;
-    Servo climber;
+    //Servo climber;
     //ColorSensor colorSensor;
 
     public static final int ARM_DOWN_POSITION = 0;
@@ -58,14 +58,14 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
         if (power<0) {
             direction = -1;
         }
-        lfMotor.setTargetPosition(lfMotor.getCurrentPosition() + direction * (int) ticks);
-        lbMotor.setTargetPosition(lbMotor.getCurrentPosition() + direction * (int) ticks);
-        rfMotor.setTargetPosition(rfMotor.getCurrentPosition() + direction * (int) ticks);
-        rbMotor.setTargetPosition(rbMotor.getCurrentPosition() + direction * (int) ticks);
         lfMotor.setPower(power);
         lbMotor.setPower(power);
         rfMotor.setPower(power);
         rbMotor.setPower(power);
+        lfMotor.setTargetPosition(lfMotor.getCurrentPosition() + direction * (int) ticks);
+        lbMotor.setTargetPosition(lbMotor.getCurrentPosition() + direction * (int) ticks);
+        rfMotor.setTargetPosition(rfMotor.getCurrentPosition() + direction * (int) ticks);
+        rbMotor.setTargetPosition(rbMotor.getCurrentPosition() + direction * (int) ticks);
     }
 
     @Override
@@ -75,37 +75,39 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
         lbMotor = hardwareMap.dcMotor.get("lbMotor");
         rfMotor = hardwareMap.dcMotor.get("rfMotor");
         rbMotor = hardwareMap.dcMotor.get("rbMotor");
+        //climber = hardwareMap.servo.get("climber"); [UNCOMMENT WHEN CLIMBER IS READY]
 
         lfMotor.setDirection(DcMotor.Direction.REVERSE);
-        rbMotor.setDirection(DcMotor.Direction.REVERSE);
+        lbMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        //colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        lfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        lbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        climber = hardwareMap.servo.get("climber");
+        for(int i=0; i<15; i++){
+            waitOneFullHardwareCycle();
+            telemetry.addData("cycle", i);
+        }
 
-        lfMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        lbMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rfMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rbMotor.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        lbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        rbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         waitOneFullHardwareCycle();
         waitForStart();
 
-        moveForwardEncoder(0.75, 60);
+        moveForwardEncoder(0.75, 90);
         turnRight(0.75, 1000);
-        moveForwardEncoder(0.75, 50);
+        /*moveForwardEncoder(0.75, 50);
         turnRight(0.75, 1000);
         moveForwardEncoder(0.75, 12);
-        /*if (colorSensor.blue() < 100) {
-            turnLeft(0.75, 500);
-            moveForward(0.5, 5);
-            turnRight(0.75, 500);
-        }
         moveForwardEncoder(0.25, 1);
         sleep(250);
         moveForwardEncoder(-0.25, 1);
-        climber.setPosition(CLIMBER_DOWN_POSITION);
+        //climber.setPosition(CLIMBER_DOWN_POSITION);
         sleep(1000);
-        climber.setPosition(CLIMBER_UP_POSITION);*/
+        //climber.setPosition(CLIMBER_UP_POSITION);*/
     }
 }

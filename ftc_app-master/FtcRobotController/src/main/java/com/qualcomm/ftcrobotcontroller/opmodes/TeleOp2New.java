@@ -61,6 +61,18 @@ public class TeleOp2New extends OpMode {
         lfMotor.setDirection(DcMotor.Direction.REVERSE);
         lbMotor.setDirection(DcMotor.Direction.REVERSE);
 
+        lfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        lbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        rbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+
+        for (int i=0; i < 15; i++){}
+
+        lfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        lbMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rbMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+
         /*
         Links servo objects to hardware locations
          */
@@ -206,11 +218,12 @@ public class TeleOp2New extends OpMode {
             telemetry.addData("Drive Mode: ", "onRamp");
         else
             telemetry.addData("Drive Mode: ", "ground");
+
+        telemetry.addData("lfTurn", lfMotor.getCurrentPosition());
+        telemetry.addData("lbTurn", lbMotor.getCurrentPosition());
+        telemetry.addData("rfTurn", rfMotor.getCurrentPosition());
+        telemetry.addData("rbTurn", rbMotor.getCurrentPosition());
     }
-
-
-
-
 
     @Override
     public void stop() {

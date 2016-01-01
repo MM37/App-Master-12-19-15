@@ -20,14 +20,14 @@ public class EncoderTestRohan extends LinearOpMode {
         if (power<0) {
             direction = -1;
         }
-        lfMotor.setTargetPosition(lfMotor.getCurrentPosition() + direction * (int) ticks);
-        lbMotor.setTargetPosition(lbMotor.getCurrentPosition() + direction * (int) ticks);
-        rfMotor.setTargetPosition(rfMotor.getCurrentPosition() + direction * (int) ticks);
-        rbMotor.setTargetPosition(rbMotor.getCurrentPosition() + direction * (int) ticks);
         lfMotor.setPower(power);
         lbMotor.setPower(power);
         rfMotor.setPower(power);
         rbMotor.setPower(power);
+        lfMotor.setTargetPosition(lfMotor.getCurrentPosition() + direction * (int) ticks);
+        lbMotor.setTargetPosition(lbMotor.getCurrentPosition() + direction * (int) ticks);
+        rfMotor.setTargetPosition(rfMotor.getCurrentPosition() + direction * (int) ticks);
+        rbMotor.setTargetPosition(rbMotor.getCurrentPosition() + direction * (int) ticks);
     }
 
     @Override
@@ -38,46 +38,43 @@ public class EncoderTestRohan extends LinearOpMode {
         rfMotor = hardwareMap.dcMotor.get("rfMotor");
         rbMotor = hardwareMap.dcMotor.get("rbMotor");
 
+        lfMotor.setDirection(DcMotor.Direction.REVERSE);
         lbMotor.setDirection(DcMotor.Direction.REVERSE);
-        rfMotor.setDirection(DcMotor.Direction.REVERSE);
 
         lfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         lbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         rfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         rbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        telemetry.addData("Reset Complete", "");
+        for(int i = 0; i < 15; i++) {
+            waitOneFullHardwareCycle();
+            telemetry.addData("cycle", i);
+        }
 
         waitForStart();
-        waitOneFullHardwareCycle();
-
-
-        telemetry.addData("starting position: ", rfMotor.getCurrentPosition());
 
         lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         lbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         rbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
-        //moveForwardEncoder(0.75, 10);
+        telemetry.addData("lf", lfMotor.getCurrentPosition());
+        telemetry.addData("lb", lbMotor.getCurrentPosition());
+        telemetry.addData("rf", rfMotor.getCurrentPosition());
+        telemetry.addData("rb", rbMotor.getCurrentPosition());
 
-        telemetry.addData("before", rfMotor.getTargetPosition());
-        lfMotor.setTargetPosition(500);
-        rfMotor.setTargetPosition(500);
+        rfMotor.setPower(0.5);
+        rfMotor.setTargetPosition(1100);
 
-        //telemetry.clearData();
-        telemetry.addData("Target", rfMotor.getTargetPosition());
+        /*lfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        lbMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rbMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
 
-        /*lfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-
-        lfMotor.setPower(0.75);
-        //lbMotor.setPower(0.75);
-        rfMotor.setPower(0.75);
-        //rbMotor.setPower(0.75);
-
-
-
-        telemetry.addData("ending position: ", rfMotor.getCurrentPosition());*/
+        while(true) {
+            telemetry.clearData();
+            telemetry.addData("lf", lfMotor.getCurrentPosition());
+            telemetry.addData("rf", rfMotor.getCurrentPosition());
+        }*/
     }
 }

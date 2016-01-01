@@ -101,5 +101,6 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("EncoderTestRohan", EncoderTestRohan.class);
     manager.register("AutonomousRampBlue", AutonomousRampBlue.class);
     manager.register("LSC Tele", TeleQualifierEncoder.class);
+    manager.register("AutonomousRepairZoneBlueEncoder", AutonomousRepairZoneBlueEncoder.class);
   }
 }

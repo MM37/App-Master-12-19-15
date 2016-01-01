@@ -26,46 +26,28 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
     public static final double CLIMBER_UP_POSITION = 0;
     public static final double CLIMBER_DOWN_POSITION = 0;
 
-    public void turnRight(double power, long time) throws InterruptedException{
+    public void turn(double power, int degrees) throws InterruptedException {
+        double ticks = degrees * (1260 / 90);
         lfMotor.setPower(power);
         lbMotor.setPower(power);
-        rbMotor.setPower(-power);
-        rfMotor.setPower(-power);
-        sleep(time * 1000);
-        lfMotor.setPower(0);
-        lbMotor.setPower(0);
-        rbMotor.setPower(0);
-        rfMotor.setPower(0);
-        sleep(500);
-    }
-
-    public void turnLeft(double power, long time) throws InterruptedException{
-        lfMotor.setPower(-power);
-        lbMotor.setPower(-power);
-        rbMotor.setPower(power);
         rfMotor.setPower(power);
-        sleep(time * 1000);
-        lfMotor.setPower(0);
-        lbMotor.setPower(0);
-        rbMotor.setPower(0);
-        rfMotor.setPower(0);
-        sleep(500);
+        rbMotor.setPower(power);
+        lfMotor.setTargetPosition(lfMotor.getCurrentPosition() + (int) ticks);
+        lbMotor.setTargetPosition(lbMotor.getCurrentPosition() + (int) ticks);
+        rfMotor.setTargetPosition(rfMotor.getCurrentPosition() - (int) ticks);
+        rbMotor.setTargetPosition(rbMotor.getCurrentPosition() - (int) ticks);
     }
 
-    public void moveForwardEncoder(double power, double inches) {
+    public void move(double power, double inches) {
         double ticks = inches * 1220 / (4 * Math.PI);
-        byte direction=1;
-        if (power<0) {
-            direction = -1;
-        }
         lfMotor.setPower(power);
         lbMotor.setPower(power);
         rfMotor.setPower(power);
         rbMotor.setPower(power);
-        lfMotor.setTargetPosition(lfMotor.getCurrentPosition() + direction * (int) ticks);
-        lbMotor.setTargetPosition(lbMotor.getCurrentPosition() + direction * (int) ticks);
-        rfMotor.setTargetPosition(rfMotor.getCurrentPosition() + direction * (int) ticks);
-        rbMotor.setTargetPosition(rbMotor.getCurrentPosition() + direction * (int) ticks);
+        lfMotor.setTargetPosition(lfMotor.getCurrentPosition() + (int) ticks);
+        lbMotor.setTargetPosition(lbMotor.getCurrentPosition() + (int) ticks);
+        rfMotor.setTargetPosition(rfMotor.getCurrentPosition() + (int) ticks);
+        rbMotor.setTargetPosition(rbMotor.getCurrentPosition() + (int) ticks);
     }
 
     @Override
@@ -98,14 +80,15 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
         waitOneFullHardwareCycle();
         waitForStart();
 
-        moveForwardEncoder(0.75, 90);
+        move(0.75, 90);
+        turn(0.75, 15);
+        move(0.2, 2);
+        /*move(0.75, 50);
         turnRight(0.75, 1000);
-        /*moveForwardEncoder(0.75, 50);
-        turnRight(0.75, 1000);
-        moveForwardEncoder(0.75, 12);
-        moveForwardEncoder(0.25, 1);
+        move(0.75, 12);
+        move(0.25, 1);
         sleep(250);
-        moveForwardEncoder(-0.25, 1);
+        move(-0.25, 1);
         //climber.setPosition(CLIMBER_DOWN_POSITION);
         sleep(1000);
         //climber.setPosition(CLIMBER_UP_POSITION);*/

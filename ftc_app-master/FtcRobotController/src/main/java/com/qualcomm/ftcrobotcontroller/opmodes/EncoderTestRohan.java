@@ -58,23 +58,28 @@ public class EncoderTestRohan extends LinearOpMode {
         rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         rbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
-        telemetry.addData("lf", lfMotor.getCurrentPosition());
-        telemetry.addData("lb", lbMotor.getCurrentPosition());
-        telemetry.addData("rf", rfMotor.getCurrentPosition());
-        telemetry.addData("rb", rbMotor.getCurrentPosition());
-
         rfMotor.setPower(0.5);
-        rfMotor.setTargetPosition(1100);
+        lfMotor.setPower(0.2);
+        lbMotor.setPower(0.2);
+        rfMotor.setPower(0.2);
+        rbMotor.setPower(0.2);
 
         /*lfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         lbMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         rfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         rbMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
 
+        lfMotor.setPower(0.2);
+        lbMotor.setPower(0.2);
+        rfMotor.setPower(-0.2);
+        rbMotor.setPower(-0.2);
+
         while(true) {
             telemetry.clearData();
             telemetry.addData("lf", lfMotor.getCurrentPosition());
+            telemetry.addData("lb", lbMotor.getCurrentPosition());
             telemetry.addData("rf", rfMotor.getCurrentPosition());
+            telemetry.addData("rb", rbMotor.getCurrentPosition());
         }*/
     }
 }

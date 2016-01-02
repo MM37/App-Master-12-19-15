@@ -58,11 +58,15 @@ public class EncoderTestRohan extends LinearOpMode {
         rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         rbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
-        rfMotor.setPower(0.5);
-        lfMotor.setPower(0.2);
-        lbMotor.setPower(0.2);
-        rfMotor.setPower(0.2);
-        rbMotor.setPower(0.2);
+        lfMotor.setPower(0.75);
+        lbMotor.setPower(0.75);
+        rfMotor.setPower(0.75);
+        rbMotor.setPower(0.75);
+
+        lfMotor.setTargetPosition(8738);
+        lbMotor.setTargetPosition(8738);
+        rfMotor.setTargetPosition(8738);
+        rbMotor.setTargetPosition(8738);
 
         /*lfMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         lbMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);

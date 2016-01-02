@@ -74,7 +74,7 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
         rbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         armMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        for(int i=0; i<15; i++){
+        for(int i=0; i<90; i++){
             waitOneFullHardwareCycle();
             telemetry.addData("cycle", i);
         }
@@ -95,27 +95,33 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
 
         telemetry.clearData();
 
-        move(0.4, 86.5);
-        telemetry.addData("part1", "");
-        sleep(5000);
+        //First move to zone area
+        move(0.5, 86.5);
+        sleep(7500);
+        //turn towards zone area
         turn(0.25, 52);
-        telemetry.addData("part2", "");
         sleep(5000);
-        move(0.25, 6.50);
-        telemetry.addData("part3", "");
+        //prepares arm for movements
+        armMotor.setPower(.15);
+        //armMotor.setTargetPosition(-350);
+        //sleep(3000);
+        //moves into zone
+        move(0.25, 11);
         sleep(5000);
-        armMotor.setPower(0.65);
-        telemetry.addData("part4", "");
-        armMotor.setTargetPosition(-800);
-        telemetry.addData("part5", "");
-        /*move(0.75, 50);
-        turnRight(0.75, 1000);
-        move(0.75, 12);
-        move(0.25, 1);
-        sleep(250);
-        move(-0.25, 1);
-        //climber.setPosition(CLIMBER_DOWN_POSITION);
-        sleep(1000);
-        //climber.setPosition(CLIMBER_UP_POSITION);*/
+        //moves arm to score
+        armMotor.setTargetPosition(-500);
+        sleep(4000);
+        move(0.20, -1.5);
+        //moves back to drag climbers off
+
+        sleep(5000);
+        armMotor.setTargetPosition(-850);
+        sleep(2000);
+        //moves arm back up
+        armMotor.setTargetPosition(50);
+        sleep(3000);
+        //moves back into zone
+        /*move(0.25, 4);
+        sleep(5000);*/
     }
 }

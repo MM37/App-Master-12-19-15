@@ -251,6 +251,8 @@ public class TeleQualifierEncoder extends OpMode {
             telemetry.addData("Drive Mode: ", "ground");
 
 
+
+
         /*state variables to hold condition of buttons
         *used to check if button was pressed last cycle
          */

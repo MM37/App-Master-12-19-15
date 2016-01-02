@@ -238,8 +238,7 @@ public class TeleQualifierEncoder extends OpMode {
         *updates robot part status
          */
         telemetry.clearData();
-        telemetry.addData("TIME LEFT: ", 120-runtime.time());
-        telemetry.addData("", "");
+        telemetry.addData("TIME LEFT: ", (int)(120-runtime.time())/60 + ":" + (int)((120-runtime.time())/2)%60);
         if(lockServos.getPosition() > 0.3)
             telemetry.addData("Lock Servos: " , "locked");
         else

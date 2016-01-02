@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import java.util.Dictionary;
@@ -52,6 +53,8 @@ public class TeleQualifierEncoder extends OpMode {
     boolean isLockClosed = true;
     int slideStage = 0;
 
+    private ElapsedTime runtime = new ElapsedTime(); //holds passed time
+
     /*change values for slide positions*/
     public static final int SLIDE0 = 0 , SLIDE1 = 500, SLIDE2 = 2000;
 
@@ -61,6 +64,7 @@ public class TeleQualifierEncoder extends OpMode {
 
     @Override
     public void init(){
+        runtime.reset();
         /*
         Links DC Motor objects to hardware locations
          */
@@ -96,6 +100,7 @@ public class TeleQualifierEncoder extends OpMode {
 
     @Override
     public void loop() {
+
 
         /*
         Creates variables for gamepad input
@@ -233,6 +238,8 @@ public class TeleQualifierEncoder extends OpMode {
         *updates robot part status
          */
         telemetry.clearData();
+        telemetry.addData("TIME LEFT: ", 120-runtime.time());
+        telemetry.addData("", "");
         if(lockServos.getPosition() > 0.3)
             telemetry.addData("Lock Servos: " , "locked");
         else

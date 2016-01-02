@@ -42,8 +42,8 @@ public class TeleQualifierEncoder extends OpMode {
     Declares servo position variables
     */
 
-    public static final double LOCK_SERVOS_CLOSED_POSITION = 0.1;
-    public static final double LOCK_SERVOS_OPEN_POSITION = 0.60;
+    public static final double LOCK_SERVOS_CLOSED_POSITION = 0.99;
+    public static final double LOCK_SERVOS_OPEN_POSITION = 0.5;
     public static final double DEPOSITING_FLAP_SERVO_OPEN_POSITION = 0;
     public static final double DEPOSITING_FLAP_SERVO_CLOSED_POSITION = 0;
     public static Boolean onRamp = false;             //should be set to true when on ramp;
@@ -185,7 +185,7 @@ public class TeleQualifierEncoder extends OpMode {
         lbMotor.setPower(leftDrivePwr);
         rfMotor.setPower(rightDrivePwr);
         rbMotor.setPower(rightDrivePwr);
-        bucketArmMotor.setPower(bucketArmPwr);
+        bucketArmMotor.setPower(bucketArmPwr * 0.6);
 
         telemetry.clearData();
         telemetry.addData("pulleyMotor1", pulleyMotor1.getCurrentPosition());

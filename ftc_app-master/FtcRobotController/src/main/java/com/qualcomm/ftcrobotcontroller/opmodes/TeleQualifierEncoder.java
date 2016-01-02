@@ -48,8 +48,9 @@ public class TeleQualifierEncoder extends OpMode {
     public static Boolean onRamp = false;             //should be set to true when on ramp;
 
     int slideInitialPosition;
-    boolean servoLockWasPressed = false;
+    boolean servoLockWasPressed = false, slideUpWasPressed = false, slideDownWasPressed = false;
     boolean isLockClosed = true;
+    int slideStage = 0;
 
     /*change values for slide positions*/
     public static final int SLIDE0 = 0 , SLIDE1 = 500, SLIDE2 = 2000;
@@ -167,6 +168,12 @@ public class TeleQualifierEncoder extends OpMode {
         }
 
         /*
+        Scales arm motor gamepad values
+         */
+        if (gamepad2.left_bumper)
+            bucketArmPwr *= 0.4;
+
+        /*
         Updates motor power
         */
         lfMotor.setPower(leftDrivePwr);
@@ -178,9 +185,7 @@ public class TeleQualifierEncoder extends OpMode {
         telemetry.clearData();
         telemetry.addData("pulleyMotor1", pulleyMotor1.getCurrentPosition());
 
-        //avoids running pulley motor in reverse past initial position
-        if(pulleyMotor1.getCurrentPosition() > slideInitialPosition)
-            pulleyMotor1.setPower(pulleyPwr);
+        pulleyMotor1.setPower(pulleyPwr);
 
         /*
         Depositing Flap Servo assignment

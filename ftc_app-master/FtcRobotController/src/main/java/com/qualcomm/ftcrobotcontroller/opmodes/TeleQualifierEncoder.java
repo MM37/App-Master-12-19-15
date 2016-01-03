@@ -192,18 +192,18 @@ public class TeleQualifierEncoder extends OpMode {
         */
         if (gamepad1.x && !flapLeftWasPressed){
             if (isLeftFlapClosed) {
-                depositingFlapLeft.setPosition(DEPOSITING_FLAP_SERVO_CLOSED_POSITION);
-            } else {
                 depositingFlapLeft.setPosition(DEPOSITING_FLAP_SERVO_OPEN_POSITION);
+            } else {
+                depositingFlapLeft.setPosition(DEPOSITING_FLAP_SERVO_CLOSED_POSITION);
             }
             isLeftFlapClosed = !isLeftFlapClosed;
         }
 
         if (gamepad1.b && !flapRightWasPressed){
             if (isRightFlapClosed) {
-                depositingFlapRight.setPosition(DEPOSITING_FLAP_SERVO_OPEN_POSITION);
-            } else {
                 depositingFlapRight.setPosition(DEPOSITING_FLAP_SERVO_CLOSED_POSITION);
+            } else {
+                depositingFlapRight.setPosition(DEPOSITING_FLAP_SERVO_OPEN_POSITION);
             }
             isRightFlapClosed = !isRightFlapClosed;
         }

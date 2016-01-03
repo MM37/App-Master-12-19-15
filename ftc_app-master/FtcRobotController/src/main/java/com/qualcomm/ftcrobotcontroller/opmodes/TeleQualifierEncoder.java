@@ -258,7 +258,7 @@ public class TeleQualifierEncoder extends OpMode {
         *updates robot part status
          */
         telemetry.clearData();
-        telemetry.addData("TIME LEFT: ", (int)((120.0 - Math.ceil((System.currentTimeMillis() - startTime) / 1000))/60) + ":" + (int)((120-Math.ceil((System.currentTimeMillis()-startTime)/1000)))%60);
+        telemetry.addData("TIME LEFT: ", (int)Math.floor((120.0 - Math.ceil((System.currentTimeMillis() - startTime) / 1000))/60) + ":" + (int)((120-Math.ceil((System.currentTimeMillis()-startTime)/1000)))%60);
         if(isLockClosed)
             telemetry.addData("Lock Servos: " , "NOT locked");
         else

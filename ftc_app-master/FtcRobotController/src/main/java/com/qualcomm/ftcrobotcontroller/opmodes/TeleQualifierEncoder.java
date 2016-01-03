@@ -4,10 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import java.util.Dictionary;
 
 import static java.lang.Math.abs;
 
@@ -34,7 +30,7 @@ public class TeleQualifierEncoder extends OpMode {
     Servo rackServo;
     Servo depositingFlapLeft;
     Servo depositingFlapRight;
-
+    Servo tiltServo;
 
 
 
@@ -44,19 +40,18 @@ public class TeleQualifierEncoder extends OpMode {
 
     public static final double LOCK_SERVOS_CLOSED_POSITION = 0.99;
     public static final double LOCK_SERVOS_OPEN_POSITION = 0.5;
-    public static final double DEPOSITING_FLAP_SERVO_OPEN_POSITION = 0;
-    public static final double DEPOSITING_FLAP_SERVO_CLOSED_POSITION = 0;
+    public static final double DEPOSITING_FLAP_SERVO_OPEN_POSITION = 0.0;
+    public static final double DEPOSITING_FLAP_SERVO_CLOSED_POSITION = 1.0;
+    public static final double TILT_LEFT = 0;
+    public static final double TILT_RIGHT = 1.0;
+    public static final double TILT_MIDDLE = 0.5;
     public static Boolean onRamp = false;             //should be set to true when on ramp;
 
-    int slideInitialPosition;
-    boolean servoLockWasPressed = false, slideUpWasPressed = false, slideDownWasPressed = false;
-    boolean isLockClosed = true;
-    int slideStage = 0;
+    boolean servoLockWasPressed = false, flapLeftWasPressed = false, flapRightWasPressed = false;
+    boolean isLockClosed = true, isLeftFlapClosed = true, isRightFlapClosed = true;
+    boolean firstRun = true;
 
-    private ElapsedTime runtime = new ElapsedTime(); //holds passed time
-
-    /*change values for slide positions*/
-    public static final int SLIDE0 = 0 , SLIDE1 = 500, SLIDE2 = 2000;
+    double startTime;
 
     public TeleQualifierEncoder() {
         /*empty*/
@@ -64,7 +59,6 @@ public class TeleQualifierEncoder extends OpMode {
 
     @Override
     public void init(){
-        runtime.reset();
         /*
         Links DC Motor objects to hardware locations
          */
@@ -83,24 +77,28 @@ public class TeleQualifierEncoder extends OpMode {
          */
         lockServos = hardwareMap.servo.get("lockServos");
         rackServo = hardwareMap.servo.get("rack");
-        //depositingFlapLeft = hardwareMap.servo.get("depositLeft");
-        //depositingFlapRight = hardwareMap.servo.get("depositRight");
+        depositingFlapLeft = hardwareMap.servo.get("flapLeft");
+        depositingFlapRight = hardwareMap.servo.get("flapRight");
+        tiltServo = hardwareMap.servo.get("tilt");
+
 
         lockServos.setPosition(LOCK_SERVOS_CLOSED_POSITION);
-        //depositingFlapServos.setPosition(DEPOSITING_FLAP_SERVO_CLOSED_POSITION);
+        depositingFlapLeft.setPosition(DEPOSITING_FLAP_SERVO_CLOSED_POSITION);
+        depositingFlapRight.setPosition(DEPOSITING_FLAP_SERVO_OPEN_POSITION);
         rackServo.setPosition(0.5);
+        tiltServo.setPosition(TILT_MIDDLE);
 
         /*sets certain motors to run with encoders*/
         pulleyMotor1.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-
-        /*gets current encoder values to set defaults*/
-        slideInitialPosition = pulleyMotor1.getCurrentPosition();
-
     }
 
     @Override
     public void loop() {
 
+        if(firstRun) {
+            startTime = System.currentTimeMillis();
+            firstRun = false;
+        }
 
         /*
         Creates variables for gamepad input
@@ -111,12 +109,12 @@ public class TeleQualifierEncoder extends OpMode {
         float pulleyPwr;
 
 
-        if(gamepad1.y)
+        if (gamepad1.y)
             onRamp = true;
-        else if(gamepad1.a)
+        else if (gamepad1.a)
             onRamp = false;
 
-        if(!onRamp) {
+        if (!onRamp) {
             /*
             Gets stick power
             */
@@ -149,13 +147,13 @@ public class TeleQualifierEncoder extends OpMode {
         }
 
 
-        if (abs(gamepad2.left_stick_y)>0.08) {
-            bucketArmPwr = (float)-0.75*gamepad2.left_stick_y;
+        if (abs(gamepad2.left_stick_y) > 0.08) {
+            bucketArmPwr = (float) -0.75 * gamepad2.left_stick_y;
         } else {
             bucketArmPwr = 0;
         }
 
-        if (abs(gamepad2.right_stick_y)>0.08) {
+        if (abs(gamepad2.right_stick_y) > 0.08) {
             pulleyPwr = -gamepad2.right_stick_y;
         } else {
             pulleyPwr = 0;
@@ -164,7 +162,7 @@ public class TeleQualifierEncoder extends OpMode {
         /*
         Scales drivetrain gamepad values
         */
-        if (gamepad1.left_bumper && gamepad1.right_bumper){
+        if (gamepad1.left_bumper && gamepad1.right_bumper) {
             leftDrivePwr *= 0.2;
             rightDrivePwr *= 0.2;
         } else if (gamepad1.left_bumper) {
@@ -187,28 +185,51 @@ public class TeleQualifierEncoder extends OpMode {
         rbMotor.setPower(rightDrivePwr);
         bucketArmMotor.setPower(bucketArmPwr * 0.6);
 
-        telemetry.clearData();
-        telemetry.addData("pulleyMotor1", pulleyMotor1.getCurrentPosition());
-
         pulleyMotor1.setPower(pulleyPwr);
 
         /*
         Depositing Flap Servo assignment
         */
-       /*<--[DELETE TO ACTIVATE CODE] if (gamepad1.b)
-            depositingFlapServos.setPosition(DEPOSITING_FLAP_SERVO_OPEN_POSITION);
-        else
-            depositingFlapServos.setPosition(DEPOSITING_FLAP_SERVO_CLOSED_POSITION);
+        if (gamepad1.x && !flapLeftWasPressed){
+            if (isLeftFlapClosed) {
+                depositingFlapLeft.setPosition(DEPOSITING_FLAP_SERVO_CLOSED_POSITION);
+            } else {
+                depositingFlapLeft.setPosition(DEPOSITING_FLAP_SERVO_OPEN_POSITION);
+            }
+            isLeftFlapClosed = !isLeftFlapClosed;
+        }
+
+        if (gamepad1.b && !flapRightWasPressed){
+            if (isRightFlapClosed) {
+                depositingFlapRight.setPosition(DEPOSITING_FLAP_SERVO_OPEN_POSITION);
+            } else {
+                depositingFlapRight.setPosition(DEPOSITING_FLAP_SERVO_CLOSED_POSITION);
+            }
+            isRightFlapClosed = !isRightFlapClosed;
+        }
+
+
+
 
         /*
         Rack & Pinion Servo assignment
         */
         if (gamepad1.dpad_right)
-            rackServo.setPosition(1);
-        else if (gamepad1.dpad_left)
             rackServo.setPosition(0);
+        else if (gamepad1.dpad_left)
+            rackServo.setPosition(1);
         else
             rackServo.setPosition(0.5);
+
+        /*
+        Tilt Servo Assignment
+         */
+        if (gamepad2.dpad_right)
+            tiltServo.setPosition(TILT_RIGHT);
+        else if (gamepad2.dpad_left)
+            tiltServo.setPosition(TILT_LEFT);
+        else
+            tiltServo.setPosition(TILT_MIDDLE);
 
         /*
         Climber Servo assignment
@@ -224,12 +245,11 @@ public class TeleQualifierEncoder extends OpMode {
         if (gamepad2.x && !servoLockWasPressed) {
             if (isLockClosed){
                 lockServos.setPosition(LOCK_SERVOS_OPEN_POSITION);
-                isLockClosed = !isLockClosed;
             }
             else {
                 lockServos.setPosition(LOCK_SERVOS_CLOSED_POSITION);
-                isLockClosed = !isLockClosed;
             }
+            isLockClosed = !isLockClosed;
         }
 
 
@@ -238,11 +258,21 @@ public class TeleQualifierEncoder extends OpMode {
         *updates robot part status
          */
         telemetry.clearData();
-        telemetry.addData("TIME LEFT: ", (int)(120-runtime.time())/60 + ":" + (int)((120-runtime.time())/2)%60);
-        if(lockServos.getPosition() > 0.3)
-            telemetry.addData("Lock Servos: " , "locked");
+        telemetry.addData("TIME LEFT: ", (int)Math.floor((120.0 - Math.ceil((System.currentTimeMillis() - startTime) / 1000))/60) + ":" + (int)((120-Math.ceil((System.currentTimeMillis()-startTime)/1000)))%60);
+        if(isLockClosed)
+            telemetry.addData("Lock Servos: " , "NOT locked");
         else
-            telemetry.addData("LockServos: ", "NOT locked");
+            telemetry.addData("LockServos: ", "locked");
+
+        if(isLeftFlapClosed)
+            telemetry.addData("LeftFlap: ", "closed");
+        else
+            telemetry.addData("LeftFlap: ", "open");
+
+        if(isRightFlapClosed)
+            telemetry.addData("RightFlap: ", "closed");
+        else
+            telemetry.addData("RightFlap: ", "open");
 
         if(onRamp)
             telemetry.addData("Drive Mode: ", "onRamp");
@@ -252,10 +282,15 @@ public class TeleQualifierEncoder extends OpMode {
 
 
 
+
+
         /*state variables to hold condition of buttons
         *used to check if button was pressed last cycle
          */
         servoLockWasPressed = gamepad2.x;
+        flapLeftWasPressed = gamepad1.x;
+        flapRightWasPressed = gamepad1.b;
+
 
     }
 

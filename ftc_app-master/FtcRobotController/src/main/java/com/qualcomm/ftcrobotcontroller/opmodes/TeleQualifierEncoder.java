@@ -228,7 +228,7 @@ public class TeleQualifierEncoder extends OpMode {
             tiltServo.setPosition(TILT_RIGHT);
         else if (gamepad2.dpad_left)
             tiltServo.setPosition(TILT_LEFT);
-        else
+        else if (gamepad2.dpad_up)
             tiltServo.setPosition(TILT_MIDDLE);
 
         /*

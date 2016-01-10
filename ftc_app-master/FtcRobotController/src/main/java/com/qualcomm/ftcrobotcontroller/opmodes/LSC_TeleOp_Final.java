@@ -11,7 +11,7 @@ import static java.lang.Math.abs;
  * Created by Sahaj on 12/31/2015.
  * This is the teleop for the LSC qualifier
  */
-public class TeleQualifierEncoder extends OpMode {
+public class LSC_TeleOp_Final extends OpMode {
 
     /*
     Declares motor variables
@@ -50,10 +50,11 @@ public class TeleQualifierEncoder extends OpMode {
     boolean servoLockWasPressed = false, flapLeftWasPressed = false, flapRightWasPressed = false;
     boolean isLockClosed = true, isLeftFlapClosed = true, isRightFlapClosed = true;
     boolean firstRun = true;
+    int pulley_zero;
 
     double startTime;
 
-    public TeleQualifierEncoder() {
+    public LSC_TeleOp_Final() {
         /*empty*/
     }
 
@@ -98,6 +99,7 @@ public class TeleQualifierEncoder extends OpMode {
         if(firstRun) {
             startTime = System.currentTimeMillis();
             firstRun = false;
+            //pulley_zero = pulleyMotor1.getCurrentPosition();
         }
 
         /*
@@ -264,12 +266,12 @@ public class TeleQualifierEncoder extends OpMode {
         else
             telemetry.addData("LockServos: ", "locked");
 
-        if(!isLeftFlapClosed)
+        if(isLeftFlapClosed)
             telemetry.addData("LeftFlap: ", "closed");
         else
             telemetry.addData("LeftFlap: ", "open");
 
-        if(!isRightFlapClosed)
+        if(isRightFlapClosed)
             telemetry.addData("RightFlap: ", "closed");
         else
             telemetry.addData("RightFlap: ", "open");
@@ -279,7 +281,7 @@ public class TeleQualifierEncoder extends OpMode {
         else
             telemetry.addData("Drive Mode: ", "ground");
 
-        //telemetry.addData("Pulley Pos: ", pulleyMotor1.getCurrentPosition());
+        //telemetry.addData("Pulley Pos: ", pulleyMotor1.getCurrentPosition() - pulley_zero);
 
 
 

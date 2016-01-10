@@ -62,8 +62,8 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("K9Line", K9Line.class);
     ///manager.register ("PushBotAuto", PushBotAuto.class);
     //manager.register ("PushBotManual", PushBotManual.class);
-    manager.register("TeleOp2New", TeleOp2New.class);
-    manager.register("Sahaj Encoder", EncoderTestSahaj.class);
+    //manager.register("TeleOp2New", TeleOp2New.class);
+    //manager.register("Sahaj Encoder", EncoderTestSahaj.class);
 
 
 
@@ -98,9 +98,14 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("PushBotDriveTouch", PushBotDriveTouch.java);
     //manager.register("PushBotIrSeek", PushBotIrSeek.java);
     //manager.register("PushBotSquare", PushBotSquare.java);
-    manager.register("EncoderTestRohan", EncoderTestRohan.class);
-    manager.register("AutonomousRampBlue", AutonomousRampBlue.class);
-    manager.register("LSC Tele", TeleQualifierEncoder.class);
-    manager.register("AutonomousRepairZoneBlueEncoder", AutonomousRepairZoneBlueEncoder.class);
+    //manager.register("EncoderTestRohan", EncoderTestRohan.class);
+    //manager.register("AutonomousRampBlue", AutonomousRampBlue.class);
+    //manager.register("LSC Tele", TeleQualifierEncoder.class);
+    //manager.register("AutonomousRepairZoneBlueEncoder", AutonomousRepairZoneBlueEncoder.class);
+    manager.register("Auto_Blue_Climber", LSC_Auto_Blue.class);
+    manager.register("Auto_Red_Climber", LSC_Auto_Red.class);
+    manager.register("Auto_Straight", LSC_Auto_Straight.class);
+    manager.register("LSC Tele Original", TeleQualifierEncoder.class);
+    manager.register("Tele New", LSC_TeleOp_Final.class);
   }
 }

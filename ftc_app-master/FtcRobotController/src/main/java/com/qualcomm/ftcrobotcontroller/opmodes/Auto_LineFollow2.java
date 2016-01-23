@@ -5,27 +5,23 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 /**
- * Created by rkhaj on 10/31/2015.
+ * Created by Sahaj on 1/13/2016.
  */
-public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
+public class Auto_LineFollow2 extends LinearOpMode{
+
+    public static final int THRESHOLD = 50;
 
     DcMotor lfMotor;
     DcMotor lbMotor;
     DcMotor rfMotor;
     DcMotor rbMotor;
-    DcMotor armMotor;
-    //Servo climber;
-    //ColorSensor colorSensor;
-
-    public static final int ARM_DOWN_POSITION = 0;
-    public static final int ARM_UP_POSITION = 0;
-    public static final double ZIP_UP_POSITION = 0;
-    public static final double ZIP_DOWN_POSITION = 0;
-    public static final double CLIMBER_UP_POSITION = 0;
-    public static final double CLIMBER_DOWN_POSITION = 0;
+    OpticalDistanceSensor ods;
+    TouchSensor touch;
 
     public void turn(double power, int degrees) throws InterruptedException {
         double ticks = degrees * (1750 / 90);
@@ -33,7 +29,7 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
         lbMotor.setPower(power);
         rfMotor.setPower(power);
         rbMotor.setPower(power);
-        int test = lfMotor.getCurrentPosition();
+
         lfMotor.setTargetPosition(lfMotor.getCurrentPosition() + (int) ticks);
         lbMotor.setTargetPosition(lbMotor.getCurrentPosition() + (int) ticks);
         rfMotor.setTargetPosition(rfMotor.getCurrentPosition() - (int) ticks);
@@ -47,12 +43,11 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
         lbMotor.setPower(power);
         rfMotor.setPower(power);
         rbMotor.setPower(power);
-        int test = lfMotor.getCurrentPosition();
+
         lfMotor.setTargetPosition(lfMotor.getCurrentPosition() + (int) ticks);
         lbMotor.setTargetPosition(lbMotor.getCurrentPosition() + (int) ticks);
         rfMotor.setTargetPosition(rfMotor.getCurrentPosition() + (int) ticks);
         rbMotor.setTargetPosition(rbMotor.getCurrentPosition() + (int) ticks);
-        //while (lfMotor.getCurrentPosition() != test + (int) ticks) {}
     }
 
     @Override
@@ -62,8 +57,8 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
         lbMotor = hardwareMap.dcMotor.get("lbMotor");
         rfMotor = hardwareMap.dcMotor.get("rfMotor");
         rbMotor = hardwareMap.dcMotor.get("rbMotor");
-        armMotor = hardwareMap.dcMotor.get("armMotor");
-        //climber = hardwareMap.servo.get("climber"); [UNCOMMENT WHEN CLIMBER IS READY]
+        ods = hardwareMap.opticalDistanceSensor.get("ods");
+        touch = hardwareMap.touchSensor.get("touch");
 
         lfMotor.setDirection(DcMotor.Direction.REVERSE);
         lbMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -72,7 +67,6 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
         lbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         rfMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         rbMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        armMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         for(int i=0; i<90; i++){
             waitOneFullHardwareCycle();
@@ -83,45 +77,90 @@ public class AutonomousRepairZoneBlueEncoder extends LinearOpMode {
         lbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         rbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        armMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
-        telemetry.addData("lf", lfMotor.getCurrentPosition());
-        telemetry.addData("lb", lbMotor.getCurrentPosition());
-        telemetry.addData("rf", rfMotor.getCurrentPosition());
-        telemetry.addData("rb", rbMotor.getCurrentPosition());
+        /*to get color of alliance*/
+        boolean ready = false;
+        boolean isRed = true; //by default, robot is red alliance
+        /*  */
 
-        //waitOneFullHardwareCycle();
+        int matColor = ods.getLightDetectedRaw(); //stores mat color
+        //int matColor = ods.getLightDetected();    //stores mat color
+
+
+        telemetry.addData("Select alliance color: blue[X], red[B]", "");
+
+        int tempCounter = 0;
+
+        while (!ready) {
+            if (gamepad1.x){
+                telemetry.clearData();
+                telemetry.addData("BLUE", "");
+                isRed = false;
+                ready = true;
+            }
+            else if (gamepad2.b){
+                telemetry.clearData();
+                telemetry.addData("RED", "");
+                isRed = true;
+                ready = true;
+            }
+        }
+
         waitForStart();
+        waitOneFullHardwareCycle();
+
 
         telemetry.clearData();
+        /*uncomment to add delay*/
+        sleep(1000);
 
-        //First move to zone area
-        move(0.5, 86.5);
-        sleep(7500);
-        //turn towards zone area
-        turn(0.25, 52);
-        sleep(5000);
-        //prepares arm for movements
-        armMotor.setPower(.15);
-        //armMotor.setTargetPosition(-350);
-        //sleep(3000);
-        //moves into zone
-        move(0.25, 11);
-        sleep(5000);
-        //moves arm to score
-        armMotor.setTargetPosition(-500);
-        sleep(4000);
-        move(0.20, -1.5);
-        //moves back to drag climbers off
+        if(isRed) {
+        /*movement to line*/
+            //First move to zone area
+            //turn(0.5, 15);      //values changed for testing to save space and time on practice field
 
-        sleep(5000);
-        armMotor.setTargetPosition(-850);
-        sleep(2000);
-        //moves arm back up
-        armMotor.setTargetPosition(50);
-        sleep(3000);
-        //moves back into zone
-        /*move(0.25, 4);
-        sleep(5000);*/
+            //sleep(2000);
+
+            //searches for white tape
+            while (ods.getLightDetectedRaw() < (THRESHOLD))    //threshold determines difference between white tape and mat
+                turn(0.2, 10);
+
+            telemetry.addData("stage 1", "");
+            turn(0.2, -16);
+            sleep(1000);
+            telemetry.addData("stage 2", matColor);
+
+            boolean touchPressed = false;
+
+            while(!touchPressed) {
+                while (ods.getLightDetectedRaw() >= THRESHOLD && !touchPressed) {
+                    move(0.2, 1);
+                    sleep(100);
+                    turn(0.3, -10);
+                    sleep(100);
+                    touchPressed = touch.isPressed();
+                    waitOneFullHardwareCycle(); //added
+                }
+                while (ods.getLightDetectedRaw() < THRESHOLD && !touchPressed) {
+                    turn(0.1, 5);
+                    sleep(100);
+                    touchPressed = touch.isPressed();
+                    waitOneFullHardwareCycle(); //added
+                }
+                waitOneFullHardwareCycle(); //added
+            }
+
+
+            telemetry.addData("REACHED END!", "");
+
+        }
+
+
+
+
+
+
     }
+
 }
+

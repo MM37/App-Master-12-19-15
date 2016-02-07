@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 /**
  * Created by rkhaj on 1/22/2016.
@@ -14,6 +16,10 @@ public class AutonomousBeacon extends LinearOpMode {
     DcMotor rfMotor;
     DcMotor rbMotor;
     GyroSensor gyro;
+    OpticalDistanceSensor ods;
+    TouchSensor touch;
+    public final double halfValue = 0.5;
+    public final double adjuster = 0.6;
 
     public void turn (double power, double degrees) {
         final double gyroZero = gyro.getRotation();
@@ -60,6 +66,8 @@ public class AutonomousBeacon extends LinearOpMode {
         rfMotor = hardwareMap.dcMotor.get("rfMotor");
         rbMotor = hardwareMap.dcMotor.get("rbMotor");
         gyro = hardwareMap.gyroSensor.get("gyro");
+        ods = hardwareMap.opticalDistanceSensor.get("ods");
+        touch = hardwareMap.touchSensor.get("touch");
 
         lfMotor.setDirection(DcMotor.Direction.REVERSE);
         lbMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -85,5 +93,24 @@ public class AutonomousBeacon extends LinearOpMode {
         turn(0.5, 45);
         move(0.5, 80);
         turn(0.5, 45);
+
+        while(ods.getLightDetected()<halfValue) {
+            lfMotor.setPower(-50);
+            lbMotor.setPower(-50);
+            rfMotor.setPower(50);
+            rbMotor.setPower(50);
+        }
+
+        while(!touch.isPressed()) {
+            lfMotor.setPower(50 + (ods.getLightDetected()-halfValue)*adjuster);
+            lbMotor.setPower(50 + (ods.getLightDetected()-halfValue)*adjuster);
+            rfMotor.setPower(50 - (ods.getLightDetected()-halfValue)*adjuster);
+            rbMotor.setPower(50 - (ods.getLightDetected()-halfValue) *adjuster);
+        }
+
+        lfMotor.setPower(0);
+        lbMotor.setPower(0);
+        rfMotor.setPower(0);
+        rbMotor.setPower(0);
     }
 }

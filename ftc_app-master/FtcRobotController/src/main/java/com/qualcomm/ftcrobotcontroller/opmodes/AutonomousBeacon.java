@@ -87,12 +87,55 @@ public class AutonomousBeacon extends LinearOpMode {
         rfMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         rbMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
+        boolean isRed = true;
+        String alliance = "Red";
+        int customWaitTime = 10;
+        boolean ready = false;
+        boolean dpadWasPressed = false;
+
+        while(!ready) {
+            telemetry.clearData();
+            telemetry.addData("Select Alliance Color", "B for Red, X for Blue");
+            telemetry.addData("Selected Alliance Color", alliance);
+            telemetry.addData("", "");
+            telemetry.addData("Select Start Wait Time", "D-Pad Up to Increse, D-Pad Down to Decrease");
+            telemetry.addData("Selected Start Wait Time", customWaitTime);
+            telemetry.addData("", "");
+            telemetry.addData("Press A to End Selection", "");
+
+            if (gamepad1.b) {
+                isRed = true;
+                alliance = "Red";
+            } else if (gamepad1.x) {
+                isRed = false;
+                alliance = "Blue";
+            }
+
+            if (gamepad1.dpad_up && !dpadWasPressed)
+                customWaitTime++;
+            else if (gamepad1.dpad_down && !dpadWasPressed)
+                customWaitTime--;
+
+            if (gamepad1.a)
+                ready = true;
+
+            dpadWasPressed = gamepad1.dpad_up || gamepad1.dpad_down;
+        }
+
         waitForStart();
+        waitOneFullHardwareCycle();
+
+        wait(customWaitTime*1000);
 
         move(0.5, 20);
         turn(0.5, 45);
         move(0.5, 80);
         turn(0.5, 45);
+
+        lfMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        lbMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        rfMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        rbMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
 
         while(ods.getLightDetected()<halfValue) {
             lfMotor.setPower(-50);

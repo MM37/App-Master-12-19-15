@@ -148,7 +148,7 @@ public class TeleQualifierEncoder extends OpMode {
 
 
         if (abs(gamepad2.left_stick_y) > 0.08) {
-            bucketArmPwr = (float) -0.75 * gamepad2.left_stick_y;
+            bucketArmPwr = -gamepad2.left_stick_y;
         } else {
             bucketArmPwr = 0;
         }
@@ -183,7 +183,10 @@ public class TeleQualifierEncoder extends OpMode {
         lbMotor.setPower(leftDrivePwr);
         rfMotor.setPower(rightDrivePwr);
         rbMotor.setPower(rightDrivePwr);
-        bucketArmMotor.setPower(bucketArmPwr * 0.6);
+        if (gamepad2.dpad_up)
+            bucketArmMotor.setPower(bucketArmPwr);
+        else
+            bucketArmMotor.setPower(bucketArmPwr * 0.45);
 
         pulleyMotor1.setPower(pulleyPwr);
 
@@ -278,6 +281,8 @@ public class TeleQualifierEncoder extends OpMode {
             telemetry.addData("Drive Mode: ", "onRamp");
         else
             telemetry.addData("Drive Mode: ", "ground");
+
+        telemetry.addData("Bucket Power", bucketArmMotor.getPower());
 
         //telemetry.addData("Pulley Pos: ", pulleyMotor1.getCurrentPosition());
 
